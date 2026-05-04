@@ -239,7 +239,7 @@ On sale event:
   "register_id": "uuid",
   "db_version": 3,
   "db_path": "drugs.sqlite",
-  "api_base_url": "https://pharmtrack.vercel.app"
+  "api_base_url": "https://pharmatrack-five.vercel.app"
 }
 ```
 
@@ -314,7 +314,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=       # server-only, never expose to browser
 
 # App
-NEXT_PUBLIC_APP_URL=             # e.g. https://pharmtrack.vercel.app
+NEXT_PUBLIC_APP_URL=             # e.g. https://pharmatrack-five.vercel.app 
 
 # Agent (embedded in config.json, not .env)
 # api_base_url is stored in config.json

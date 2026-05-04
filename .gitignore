@@ -1,0 +1,47 @@
+# Node
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Environment (.env.example is intentionally NOT ignored)
+.env
+.env.local
+.env.*.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# PyInstaller
+agent/dist/
+agent/build/
+*.spec
+!pharmtrack.spec
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# SQLite (agents download this; never commit it)
+*.sqlite
+
+# Misc
+*.log
+error.log
+config.json
+
+# Next.js / Vercel extras
+.pnp
+.pnp.*
+.vercel
+*.tsbuildinfo
+next-env.d.ts
