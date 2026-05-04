@@ -37,7 +37,7 @@ The core problem it solves: pharmacy owners cannot remotely track how much money
 | Layer | Technology | Reason |
 |---|---|---|
 | Database + Auth + Realtime + Storage | **Supabase** | Managed Postgres, built-in auth, built-in realtime, file storage for SQLite distribution |
-| Frontend / Dashboard | **Next.js 14 (App Router)** | SSR + client components, easy Vercel deploy |
+| Frontend / Dashboard | **Next.js 16 (App Router)** | SSR + client components, easy Vercel deploy |
 | Styling | **Tailwind CSS + shadcn/ui** | Fast, consistent, mobile-responsive |
 | API routes | **Next.js API routes** (`/app/api/`) | Keeps everything in one repo |
 | Windows Agent | **Python 3.11** | Best library support for keyboard hooks + system tray on Windows |
