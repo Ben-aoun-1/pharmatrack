@@ -38,7 +38,7 @@ The core problem it solves: pharmacy owners cannot remotely track how much money
 |---|---|---|
 | Database + Auth + Realtime + Storage | **Supabase** | Managed Postgres, built-in auth, built-in realtime, file storage for SQLite distribution |
 | Frontend / Dashboard | **Next.js 16 (App Router)** | SSR + client components, easy Vercel deploy |
-| Styling | **Tailwind CSS + shadcn/ui** | Fast, consistent, mobile-responsive |
+| Styling | **Tailwind CSS v4 + shadcn/ui** | Fast, consistent, mobile-responsive |
 | API routes | **Next.js API routes** (`/app/api/`) | Keeps everything in one repo |
 | Windows Agent | **Python 3.11** | Best library support for keyboard hooks + system tray on Windows |
 | Agent packaging | **PyInstaller** | Compiles Python to a single `.exe` with no dependencies |
@@ -57,7 +57,7 @@ pharmtrack/
 ├── .env.local                       ← never commit this
 ├── .gitignore
 │
-├── app/                             ← Next.js 14 App Router
+├── app/                             ← Next.js 16 App Router
 │   ├── layout.tsx                   ← root layout, fonts, global providers
 │   ├── page.tsx                     ← redirect to /login or /dashboard
 │   ├── login/
