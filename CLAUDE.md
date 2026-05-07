@@ -329,7 +329,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 | Phase | Scope | Status |
 |---|---|---|
 | **1** | Supabase schema (`schema.sql`) + `scripts/import_drugs.py` (.xlsx → Supabase + SQLite export) | ✅ |
-| **2** | Next.js project scaffold + Supabase auth + `/login` page + layout + route protection | ⬜ Not started |
+| **2** | Next.js project scaffold + Supabase auth + `/login` page + layout + route protection | ✅ |
 | **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ⬜ Not started |
 | **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ⬜ Not started |
 | **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ⬜ Not started |
