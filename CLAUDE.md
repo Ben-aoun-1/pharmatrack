@@ -56,6 +56,7 @@ pharmtrack/
 ├── .env.example                     ← all required env vars with placeholders
 ├── .env.local                       ← never commit this
 ├── .gitignore
+├── middleware.ts                    ← Supabase session refresh + route protection
 │
 ├── app/                             ← Next.js 16 App Router
 │   ├── layout.tsx                   ← root layout, fonts, global providers
@@ -302,6 +303,7 @@ Response (200):
 - **Comments:** Write comments in **English**. UI text and user-facing strings in **French**.
 - **No over-engineering:** Do not add abstractions, layers, or patterns that aren't explicitly needed for the current phase. Build what is specified, nothing more.
 - **Supabase clients:** Use the correct client for context — `client.ts` in browser components, `server.ts` in Server Components and API routes, `admin.ts` only for admin operations that require service role.
+- **Builds:** Always run `npm run build` in PowerShell, not bash. Turbopack's native workers segfault under the bash sandbox (os error 10054 / exit 139). Claude Code's bash_tool is fine for file operations, git, and Python scripts — but for any `npm run build` or `npm run dev`, instruct the human to run it in PowerShell and report back.
 
 ---
 
