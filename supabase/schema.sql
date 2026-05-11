@@ -10,6 +10,9 @@
 --   2026-06-01  Initial schema (Phase 1). Five tables, RLS enabled on all,
 --               owner-scoped SELECT policies. Writes happen via the service-role
 --               client in API routes / scripts, which bypasses RLS by design.
+-- Migration 2: added is_price_unverified to transactions (Phase 3)
+--               Set true when a sale's barcode is unknown to the drugs table, so
+--               the agent-sent price is kept but flagged instead of trusted.
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
@@ -45,6 +48,7 @@ create table if not exists public.transactions (
     barcode       text not null,            -- CODE_PCT (7 digits)
     drug_name     text not null,            -- NOM_COMMERCIAL
     selling_price numeric(10,3) not null,   -- pre-computed at import time
+    is_price_unverified boolean default false, -- true when barcode unknown to drugs table
     created_at    timestamptz default now()
 );
 

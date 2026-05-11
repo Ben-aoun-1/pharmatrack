@@ -95,11 +95,13 @@ pharmtrack/
 │   │   ├── server.ts                ← server Supabase client (createServerComponentClient)
 │   │   └── admin.ts                 ← service role client for admin operations only
 │   ├── utils.ts                     ← shared helpers (formatPrice, formatDate, etc.)
-│   └── constants.ts                 ← MARGIN_BY_CATEGORY, APP_NAME, etc.
+│   ├── constants.ts                 ← MARGIN_BY_CATEGORY, APP_NAME, etc.
+│   └── validators.ts                ← input validation helpers (UUID, barcode, price)
 │
 ├── supabase/
 │   ├── schema.sql                   ← full DB schema, runnable in Supabase SQL editor
-│   └── seed.sql                     ← optional: test data for local dev
+│   ├── seed.sql                     ← optional: test data for local dev
+│   └── migrations/                  ← incremental ALTER scripts applied after schema.sql
 │
 └── agent/                           ← Windows agent (Python, compiled to .exe)
     ├── main.py                      ← entry point
@@ -332,7 +334,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 |---|---|---|
 | **1** | Supabase schema (`schema.sql`) + `scripts/import_drugs.py` (.xlsx → Supabase + SQLite export) | ✅ |
 | **2** | Next.js project scaffold + Supabase auth + `/login` page + layout + route protection | ✅ |
-| **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ⬜ Not started |
+| **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ✅ |
 | **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ⬜ Not started |
 | **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ⬜ Not started |
 | **6** | PyInstaller packaging → single `.exe` with assets | ⬜ Not started |
