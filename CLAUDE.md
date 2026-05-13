@@ -82,7 +82,7 @@ pharmtrack/
 ├── components/                      ← shared React components
 │   ├── ui/                          ← shadcn/ui primitives (auto-generated, do not edit manually)
 │   ├── dashboard/
-│   │   ├── Salesfeed.tsx            ← real-time list of incoming transactions
+│   │   ├── SalesFeed.tsx            ← real-time list of incoming transactions
 │   │   ├── RegisterCard.tsx         ← per-register summary card
 │   │   └── TotalsBar.tsx            ← today / this week / this month totals
 │   └── admin/
@@ -96,7 +96,8 @@ pharmtrack/
 │   │   └── admin.ts                 ← service role client for admin operations only
 │   ├── utils.ts                     ← shared helpers (formatPrice, formatDate, etc.)
 │   ├── constants.ts                 ← MARGIN_BY_CATEGORY, APP_NAME, etc.
-│   └── validators.ts                ← input validation helpers (UUID, barcode, price)
+│   ├── validators.ts                ← input validation helpers (UUID, barcode, price)
+│   └── types.ts                     ← shared TypeScript types (Transaction, Register, Pharmacy)
 │
 ├── supabase/
 │   ├── schema.sql                   ← full DB schema, runnable in Supabase SQL editor
@@ -335,7 +336,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 | **1** | Supabase schema (`schema.sql`) + `scripts/import_drugs.py` (.xlsx → Supabase + SQLite export) | ✅ |
 | **2** | Next.js project scaffold + Supabase auth + `/login` page + layout + route protection | ✅ |
 | **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ✅ |
-| **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ⬜ Not started |
+| **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ✅ |
 | **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ⬜ Not started |
 | **6** | PyInstaller packaging → single `.exe` with assets | ⬜ Not started |
 | **7** | Admin panel: create pharmacy, generate license key, upload new drug DB | ⬜ Not started |
