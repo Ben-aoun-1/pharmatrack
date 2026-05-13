@@ -320,6 +320,7 @@ SUPABASE_SERVICE_ROLE_KEY=       # server-only, never expose to browser
 
 # App
 NEXT_PUBLIC_APP_URL=             # e.g. https://pharmatrack-five.vercel.app 
+TZ=Africa/Tunis  # server timezone for correct "aujourd'hui" boundaries
 
 # Agent (embedded in config.json, not .env)
 # api_base_url is stored in config.json
