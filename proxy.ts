@@ -13,7 +13,7 @@ const PUBLIC_PATHS = [
   "/api/db-version",
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // The official Supabase SSR pattern: keep request/response cookies in sync so
   // the access token can be silently refreshed on every request.
   let supabaseResponse = NextResponse.next({ request });

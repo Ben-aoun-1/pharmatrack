@@ -56,7 +56,7 @@ pharmtrack/
 ├── .env.example                     ← all required env vars with placeholders
 ├── .env.local                       ← never commit this
 ├── .gitignore
-├── middleware.ts                    ← Supabase session refresh + route protection
+├── proxy.ts                         ← Supabase session refresh + route protection
 │
 ├── app/                             ← Next.js 16 App Router
 │   ├── layout.tsx                   ← root layout, fonts, global providers
