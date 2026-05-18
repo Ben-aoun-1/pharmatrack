@@ -114,8 +114,9 @@ pharmtrack/
     ├── updater.py                   ← check DB version, download new SQLite if needed
     ├── requirements.txt
     ├── pharmtrack.spec              ← PyInstaller spec file
+    ├── README.md                    ← installation guide (French)
     └── assets/
-        └── icon.ico                 ← tray icon
+        └── icon.ico                 ← tray icon (optional; tray uses a PIL-drawn icon at runtime)
 │
 └── scripts/
     ├── import_drugs.py              ← import .xlsx → Supabase drugs table + export SQLite
@@ -338,7 +339,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 | **2** | Next.js project scaffold + Supabase auth + `/login` page + layout + route protection | ✅ |
 | **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ✅ |
 | **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ✅ |
-| **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ⬜ Not started |
+| **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ✅ |
 | **6** | PyInstaller packaging → single `.exe` with assets | ⬜ Not started |
 | **7** | Admin panel: create pharmacy, generate license key, upload new drug DB | ⬜ Not started |
 
