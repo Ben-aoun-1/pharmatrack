@@ -1,0 +1,3 @@
+-- Note: is_price_unverified = true when barcode not found in drugs table
+-- selling_price = 0.0 is valid for unknown barcodes — recorded and flagged
+-- No schema change needed, documenting intent only

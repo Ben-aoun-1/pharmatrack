@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isValidPrice, isValidUUID } from "@/lib/validators";
+import { isValidPriceOrZero, isValidUUID } from "@/lib/validators";
 
 // POST /api/transaction — called by the Windows agent on every F10 sale.
 // Agent-facing: authenticated by license_key, never by session cookie.
@@ -42,8 +42,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
     }
 
-    // Agent-sent price must be a positive, finite number.
-    if (!isValidPrice(selling_price)) {
+    // Agent-sent price must be a non-negative, finite number. 0.0 is allowed:
+    // it's what the agent sends for an unknown barcode (recorded and flagged).
+    if (!isValidPriceOrZero(selling_price)) {
       return NextResponse.json(
         { error: "Prix invalide" },
         { status: 400 },

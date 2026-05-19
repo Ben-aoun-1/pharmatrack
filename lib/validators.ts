@@ -17,3 +17,9 @@ export function isValidBarcode(str: string): boolean {
 export function isValidPrice(val: unknown): boolean {
   return typeof val === "number" && Number.isFinite(val) && val > 0;
 }
+
+// Price must be a non-negative, finite number. Allows 0.0, which the agent
+// sends for an unknown barcode (recorded and flagged via is_price_unverified).
+export function isValidPriceOrZero(val: unknown): boolean {
+  return typeof val === "number" && Number.isFinite(val) && val >= 0;
+}
