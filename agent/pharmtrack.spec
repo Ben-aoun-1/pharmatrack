@@ -1,4 +1,5 @@
-# pharmtrack.spec — PyInstaller build spec for the PharmTrack agent.
+# -*- mode: python ; coding: utf-8 -*-
+
 block_cipher = None
 
 a = Analysis(
@@ -10,11 +11,13 @@ a = Analysis(
         'pynput.keyboard._win32',
         'pynput.mouse._win32',
         'pystray._win32',
+        'PIL._tkinter_finder',
+        'pkg_resources.py2_compat',
     ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['matplotlib', 'numpy', 'pandas', 'scipy', 'tkinter.test'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -37,7 +40,7 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,        # no console window
+    console=False,
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,

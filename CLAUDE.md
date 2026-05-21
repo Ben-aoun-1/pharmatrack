@@ -114,6 +114,8 @@ pharmtrack/
     ├── updater.py                   ← check DB version, download new SQLite if needed
     ├── requirements.txt
     ├── pharmtrack.spec              ← PyInstaller spec file
+    ├── build.ps1                    ← Windows build script (human runs in PowerShell)
+    ├── test_agent.py                ← pre-build smoke test (imports + core logic)
     ├── README.md                    ← installation guide (French)
     └── assets/
         └── icon.ico                 ← tray icon (optional; tray uses a PIL-drawn icon at runtime)
@@ -340,7 +342,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 | **3** | API routes: `/api/activate`, `/api/transaction`, `/api/db-version` | ✅ |
 | **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ✅ |
 | **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ✅ |
-| **6** | PyInstaller packaging → single `.exe` with assets | ⬜ Not started |
+| **6** | PyInstaller packaging → single `.exe` with assets — human runs `agent/build.ps1` in PowerShell to produce `dist/PharmTrack.exe` | ✅ |
 | **7** | Admin panel: create pharmacy, generate license key, upload new drug DB | ⬜ Not started |
 
 > **Rule:** When completing a phase, update the Status column from ⬜ to ✅.
