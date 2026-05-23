@@ -23,6 +23,7 @@ import argparse
 import os
 import sqlite3
 import sys
+from pathlib import Path
 
 from dotenv import load_dotenv
 from openpyxl import load_workbook
@@ -180,15 +181,48 @@ def read_rows(path: str, sheet) -> list:
     return drugs
 
 
+def _load_environment() -> None:
+    """Load .env / .env.local from the project root and the script directory.
+
+    Looks in both the script's own directory and its parent (the project root,
+    where .env.local lives). Files are loaded lowest- to highest-priority with
+    override=True, so the script-local files win over the project-root ones, and
+    .env.local wins over .env within a directory.
+    """
+    script_dir = Path(__file__).resolve().parent
+    parent_dir = script_dir.parent
+    for path in (
+        parent_dir / ".env",
+        parent_dir / ".env.local",
+        script_dir / ".env",
+        script_dir / ".env.local",
+    ):
+        if path.exists():
+            load_dotenv(path, override=True)
+
+
+def _resolve_supabase_credentials() -> tuple[str | None, str | None]:
+    """Resolve the Supabase URL and service-role key, accepting both naming
+    conventions. Prefer the server-side (non-NEXT_PUBLIC_) names.
+    """
+    url = os.environ.get("SUPABASE_URL") or os.environ.get(
+        "NEXT_PUBLIC_SUPABASE_URL"
+    )
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
+        "SUPABASE_SERVICE_KEY"
+    )
+    return url, key
+
+
 def upsert_to_supabase(drugs: list, batch_size: int = 500) -> None:
     """Upsert all drugs into the Supabase `drugs` table via the service role."""
-    load_dotenv()
-    url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    _load_environment()
+    url, key = _resolve_supabase_credentials()
     if not url or not key:
         print(
-            "ERROR: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must "
-            "be set (see .env.example).",
+            "ERROR: set SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and "
+            "SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY) — see "
+            ".env.example.",
             file=sys.stderr,
         )
         sys.exit(1)
