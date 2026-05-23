@@ -1,7 +1,7 @@
 """
 PharmTrack — Drug DB import.
 
-Reads a drugs spreadsheet (.xlsx), pre-computes each selling price
+Reads a drugs spreadsheet (.xls or .xlsx), pre-computes each selling price
 (CLAUDE.md section 6), then:
   1. Upserts every drug into the Supabase `drugs` table (service-role client).
   2. Exports a self-contained SQLite file for distribution to Windows agents.
@@ -86,15 +86,46 @@ def resolve_columns(header_row) -> dict:
     return mapping
 
 
-def read_rows(xlsx_path: str, sheet) -> list:
-    """Read the spreadsheet into a list of drug dicts with computed prices."""
-    workbook = load_workbook(filename=xlsx_path, read_only=True, data_only=True)
-    if isinstance(sheet, int):
-        worksheet = workbook.worksheets[sheet]
-    else:
-        worksheet = workbook[sheet]
+def _iter_rows(path: str, sheet):
+    """Yield rows (sequences of cell values), choosing the engine by extension.
 
-    rows = worksheet.iter_rows(values_only=True)
+    .xlsx/.xlsm → openpyxl (engine for modern Excel).
+    .xls        → xlrd (the only engine that still reads the legacy format).
+    """
+    ext = os.path.splitext(path)[1].lower()
+
+    if ext == ".xls":
+        # openpyxl cannot read the legacy .xls format; use xlrd instead.
+        import xlrd  # imported lazily so .xlsx-only setups don't need it
+
+        book = xlrd.open_workbook(path)
+        worksheet = (
+            book.sheet_by_index(sheet)
+            if isinstance(sheet, int)
+            else book.sheet_by_name(sheet)
+        )
+        for r in range(worksheet.nrows):
+            # Normalize xlrd's empty cells ("") to None to match openpyxl.
+            yield [
+                None if (isinstance(v, str) and v.strip() == "") else v
+                for v in worksheet.row_values(r)
+            ]
+        return
+
+    workbook = load_workbook(filename=path, read_only=True, data_only=True)
+    worksheet = (
+        workbook.worksheets[sheet] if isinstance(sheet, int) else workbook[sheet]
+    )
+    try:
+        for row in worksheet.iter_rows(values_only=True):
+            yield row
+    finally:
+        workbook.close()
+
+
+def read_rows(path: str, sheet) -> list:
+    """Read the spreadsheet into a list of drug dicts with computed prices."""
+    rows = _iter_rows(path, sheet)
     try:
         header_row = next(rows)
     except StopIteration:
@@ -144,7 +175,6 @@ def read_rows(xlsx_path: str, sheet) -> list:
             "ap":              ap,
         })
 
-    workbook.close()
     if skipped:
         print(f"  ⚠ Skipped {skipped} row(s) with missing/invalid required fields.")
     return drugs
@@ -220,9 +250,12 @@ def export_sqlite(drugs: list, sqlite_path: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Import a drugs .xlsx into Supabase and export a SQLite file."
+        description="Import a drugs spreadsheet (.xls/.xlsx) into Supabase and "
+        "export a SQLite file."
     )
-    parser.add_argument("xlsx", help="Path to the source .xlsx spreadsheet.")
+    parser.add_argument(
+        "xlsx", help="Path to the source spreadsheet (.xls or .xlsx)."
+    )
     parser.add_argument(
         "--sqlite-out",
         default="drugs.sqlite",
