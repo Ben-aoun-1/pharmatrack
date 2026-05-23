@@ -34,6 +34,10 @@ desktop.ini
 # SQLite (agents download this; never commit it)
 *.sqlite
 
+# Source drug spreadsheets and import outputs (data, not code)
+*.xls
+scripts/output/
+
 # Misc
 *.log
 error.log
