@@ -14,9 +14,10 @@ Usage:
     python import_drugs.py drugs.xlsx
     python import_drugs.py drugs.xlsx --sqlite-out drugs.sqlite --sheet 0
 
-Required environment variables (see .env.example):
-    NEXT_PUBLIC_SUPABASE_URL
-    SUPABASE_SERVICE_ROLE_KEY        # server-only, never expose to the browser
+Required environment variables (see .env.example). Either name is accepted;
+read from the shell, then scripts/.env, then .env.local at the project root:
+    SUPABASE_URL              or NEXT_PUBLIC_SUPABASE_URL
+    SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SERVICE_KEY   # server-only, never expose
 """
 
 import argparse
@@ -182,23 +183,23 @@ def read_rows(path: str, sheet) -> list:
 
 
 def _load_environment() -> None:
-    """Load .env / .env.local from the project root and the script directory.
+    """Populate os.environ from .env files without overriding existing values.
 
-    Looks in both the script's own directory and its parent (the project root,
-    where .env.local lives). Files are loaded lowest- to highest-priority with
-    override=True, so the script-local files win over the project-root ones, and
-    .env.local wins over .env within a directory.
+    Priority (highest first):
+      1. Variables already set in the environment (e.g. PowerShell ``$env:``).
+      2. ``scripts/.env`` — next to this script.
+      3. ``.env.local`` at the project root (one level up from ``scripts/``).
+
+    ``load_dotenv(override=False)`` never replaces a variable that is already
+    set, so loading the higher-priority file first preserves the order above.
     """
     script_dir = Path(__file__).resolve().parent
-    parent_dir = script_dir.parent
-    for path in (
-        parent_dir / ".env",
-        parent_dir / ".env.local",
-        script_dir / ".env",
-        script_dir / ".env.local",
-    ):
+    project_root = script_dir.parent
+    # Higher-priority source first; override=False keeps already-set env vars
+    # (and earlier-loaded files) intact.
+    for path in (script_dir / ".env", project_root / ".env.local"):
         if path.exists():
-            load_dotenv(path, override=True)
+            load_dotenv(path, override=False)
 
 
 def _resolve_supabase_credentials() -> tuple[str | None, str | None]:
@@ -219,10 +220,16 @@ def upsert_to_supabase(drugs: list, batch_size: int = 500) -> None:
     _load_environment()
     url, key = _resolve_supabase_credentials()
     if not url or not key:
+        missing = []
+        if not url:
+            missing.append("SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL)")
+        if not key:
+            missing.append("SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)")
         print(
-            "ERROR: set SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and "
-            "SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY) — see "
-            ".env.example.",
+            "ERROR: missing required environment variable(s): "
+            + "; ".join(missing)
+            + ".\nSet them in your shell (PowerShell: $env:NAME=\"value\"), in "
+            "scripts/.env, or in .env.local at the project root.",
             file=sys.stderr,
         )
         sys.exit(1)
