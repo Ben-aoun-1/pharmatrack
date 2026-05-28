@@ -76,8 +76,12 @@ pharmtrack/
 │   │   └── route.ts                 ← POST: validate license key, register machine, return config
 │   ├── transaction/
 │   │   └── route.ts                 ← POST: ingest a sale from an agent
-│   └── db-version/
-│       └── route.ts                 ← GET: return current DB version + download URL
+│   ├── db-version/
+│   │   └── route.ts                 ← GET: return current DB version + download URL
+│   └── admin/                       ← admin-only routes (browser, is_admin gated)
+│       ├── create-pharmacy/route.ts ← POST: create auth user + pharmacy + license key
+│       ├── upload-db/route.ts       ← POST: upload SQLite to Storage, bump version
+│       └── pharmacies/route.ts      ← GET: list pharmacies + owner emails
 │
 ├── components/                      ← shared React components
 │   ├── ui/                          ← shadcn/ui primitives (auto-generated, do not edit manually)
@@ -343,7 +347,7 @@ Each phase is a separate Claude Code session. Complete one phase fully before st
 | **4** | Dashboard UI: `SalesFeed`, `RegisterCard`, `TotalsBar` + Supabase Realtime integration | ✅ |
 | **5** | Windows agent: keyboard hook + SQLite lookup + API calls + system tray | ✅ |
 | **6** | PyInstaller packaging → single `.exe` with assets — human runs `agent/build.ps1` in PowerShell to produce `dist/PharmTrack.exe` | ✅ |
-| **7** | Admin panel: create pharmacy, generate license key, upload new drug DB | ⬜ Not started |
+| **7** | Admin panel: create pharmacy, generate license key, upload new drug DB | ✅ |
 
 > **Rule:** When completing a phase, update the Status column from ⬜ to ✅.
 
